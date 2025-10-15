@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aylanma Komponent</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="Container">
+        <div class="Title">
+            <h1>Accordion companent</h1>
+            <button class="btn btn-create sub-btn"  type="submit"> Add New</button>
+        </div>
+        <form id="add-form" >
+            <div>
+                <label
+                  for="Question-input"
+                  class="label"
+                  >Question:</label
+                >
+                <input
+                  id="Question-input"
+                  type="text"
+                  required
+                  class="input-q"
+                />
+              </div>
+            <div>
+                <label
+                  for="Ansver-input"
+                  class="label"
+                  >Answer:</label
+                >
+                <input
+                  id="Ansver-input"
+                  type="text"
+                  required
+                  class="input-a"
+                />
+              </div>
+              <div class="form-btns">
+                <button class="btn btn-cancel">Cancel</button>
+                <button type="submit" class="btn btn-create">Create Accord</button>
+              </div>
+            
+        </form>
+   
+       
+        </div>
+        <div class="accord">
+            <button class="Question">Flowbite nima?</button>
+            <div class="Answer">
+                Flowbite — bu Tailwind CSS asosida yaratilgan ochiq manba interaktiv komponentlar kutubxonasi, jumladan tugmalar, ochiluvchi menyular, modal oynalar va navigatsiya panellari. Ushbu qo'llanmani ko'rib, boshlash va Tailwind CSS bilan veb-saytlarni yanada tez ishlab chiqishni boshlang.
+            </div>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
