@@ -1,21 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('.Container');
   const API = 'https://faq-crud.onrender.com/api/faqs';
-  const API_Post ="https://faq-crud.onrender.com/api/faqs"
   let accords = [];
   let editId = null;
-  
+
+  // ===== GET =====
   async function getData() {
     try {
       const res = await fetch(API);
       const data = await res.json();
-    //   apini malumotlarini tekshirib oldim ustoz
       accords = Array.isArray(data) ? data : data.data || [];
       render();
     } catch (e) {
+      console.error('GetData error:', e);
     }
   }
 
+  // ===== RENDER =====
   function render() {
     container.innerHTML = `
       <div class="Title" style="margin:100px 0 0 0;">
@@ -46,9 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
       container.appendChild(acc);
-    //   acc bu accord sozini qisqartmasi
 
-    const qBtn = acc.querySelector('.Question');
+      const qBtn = acc.querySelector('.Question');
       const ans = acc.querySelector('.Answer');
       const img = acc.querySelector('.up-img');
 
@@ -73,14 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setEvents();
   }
 
+  // ===== FORM EVENTS =====
   function setEvents() {
     const form = document.getElementById('form');
     const addBtn = document.getElementById('add-btn');
     const saveBtn = document.getElementById('save-btn');
 
     addBtn.onclick = () => {
-      console.log("men setman");
-      
       editId = null;
       saveBtn.textContent = 'Create';
       form.reset();
@@ -100,21 +99,58 @@ document.addEventListener('DOMContentLoaded', () => {
       getData();
     };
   }
-//   q = question
-// a = answer
-  // ======== CREATE btn ========
-  async function createAccord(q, a) {
+
+  // ===== CREATE =====
+  async function createAcc(q, a) {
     try {
-        const response = await fetch(API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: API.question, content: API.answer })
-        });
-       
+      const response = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: q, answer: a })
+      });
+      if (!response.ok) throw new Error('Create failed');
     } catch (err) {
-        console.error('Yaratish xatosi amndamas 500:', err);
+      console.error('Create error:', err);
     }
-}
-createAccord()
+  }
+
+  // ===== DELETE =====
+  async function delAcc(id) {
+    if (!confirm('Sen ochirmoqchimisan')) return;
+    try {
+      await fetch(`${API}/${id}`, { method: 'DELETE' });
+      getData();
+    } catch (err) {
+      console.error('Delete error:', err);
+    }
+  }
+
+  // ===== EDIT =====
+  function editAcc(id) {
+    const item = accords.find(a => a.id === id);
+    if (!item) return;
+    const form = document.getElementById('form');
+    const saveBtn = document.getElementById('save-btn');
+    form.style.display = 'block';
+    document.getElementById('q').value = item.question;
+    document.getElementById('a').value = item.answer;
+    saveBtn.textContent = 'Save';
+    editId = id;
+  }
+
+  // ===== UPDATE =====
+  async function updateAcc(id, q, a) {
+    try {
+      const res = await fetch(`${API}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: q, answer: a })
+      });
+      if (!res.ok) throw new Error('Update failed');
+    } catch (err) {
+      console.error('Update error:', err);
+    }
+  }
+
   getData();
 });
