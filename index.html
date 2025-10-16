@@ -3,58 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aylanma Komponent</title>
+    <title>Accord crud</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    </style>
 </head>
 <body>
     <div class="Container">
-        <div class="Title">
-            <h1>Accordion companent</h1>
-            <button class="btn btn-create sub-btn"  type="submit"> Add New</button>
+        <div class="Title" style="margin: 100px 0 0 0;">
+            <img src="./images/logo.png" alt="">
+            <button class="btn sub-btn" id="sub-btn" type="submit">Add New</button>
         </div>
-        <form id="add-form" >
+        <form id="add-form" class="form">
             <div>
-                <label
-                  for="Question-input"
-                  class="label"
-                  >Question:</label
-                >
-                <input
-                  id="Question-input"
-                  type="text"
-                  required
-                  class="input-q"
-                />
-              </div>
-            <div>
-                <label
-                  for="Ansver-input"
-                  class="label"
-                  >Answer:</label
-                >
-                <input
-                  id="Ansver-input"
-                  type="text"
-                  required
-                  class="input-a"
-                />
-              </div>
-              <div class="form-btns">
-                <button class="btn btn-cancel">Cancel</button>
-                <button type="submit" class="btn btn-create">Create Accord</button>
-              </div>
-            
-        </form>
-   
-       
-        </div>
-        <div class="accord">
-            <button class="Question">Flowbite nima?</button>
-            <div class="Answer">
-                Flowbite — bu Tailwind CSS asosida yaratilgan ochiq manba interaktiv komponentlar kutubxonasi, jumladan tugmalar, ochiluvchi menyular, modal oynalar va navigatsiya panellari. Ushbu qo'llanmani ko'rib, boshlash va Tailwind CSS bilan veb-saytlarni yanada tez ishlab chiqishni boshlang.
+                <label for="Question-input" class="label">Question:</label>
+                <input id="Question-input" type="text" required class="input-q" />
             </div>
-        </div>
+            <div>
+                <label for="Ansver-input" class="label">Answer:</label>
+                <input id="Ansver-input" type="text" required class="input-a" />
+            </div>
+            <div class="form-btns">
+                <button type="submit" class="btn btn-create">Create </button>
+            </div>
+        </form>
     </div>
+
+
     <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,417 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.Container');
+    const API_BASE = 'https://crud-nodejs-ixa1.onrender.com/api/posts';
+    let allAccords = [];
+    let editingId = null; // 🔹 Tahrirlanayotgan ID
+
+    // ======== FETCH ACCORDS ========
+    async function fetchAccords() {
+        try {
+            const response = await fetch(API_BASE);
+            const data = await response.json();
+
+            allAccords = Array.isArray(data)
+                ? data.map(post => ({
+                    id: post.id,
+                    title: post.title || post.question || 'No title',
+                    content: post.content || post.answer || 'No content',
+                    author: post.author || post.title || 'default_author'
+                }))
+                : (data.data
+                    ? data.data.map(post => ({
+                        id: post.id,
+                        title: post.title || post.question || 'No title',
+                        content: post.content || post.answer || 'No content',
+                        author: post.author || post.title || 'default_author'
+                    }))
+                    : []);
+
+            renderAccords();
+        } catch (error) {
+            console.error('API xatosi:', error);
+        }
+    }
+
+    // ======== RENDER ========
+    function renderAccords() {
+        container.innerHTML = `
+            <div class="Title" style="margin: 100px 0 0 0;">
+                <img src="./images/logo.png" alt="">
+                <button class="btn sub-btn" id="sub-btn" type="button">Add New</button>
+            </div>
+            <form id="add-form" class="form" style="display:none;">
+                <div>
+                    <label for="Question-input" class="label">Question:</label>
+                    <input id="Question-input" type="text" required class="input-q" />
+                </div>
+                <div>
+                    <label for="Ansver-input" class="label">Answer:</label>
+                    <input id="Ansver-input" type="text" required class="input-a" />
+                </div>
+                <div class="form-btns">
+                    <button type="submit" class="btn btn-create" id="form-btn">Create Accord</button>
+                </div>
+            </form>
+        `;
+
+        // === ACCORDLAR ===
+        allAccords.forEach(item => {
+            const accord = document.createElement('div');
+            accord.classList.add('accord');
+            accord.innerHTML = `
+                <button class="Question">
+                    ${item.title}
+                    <img class="up-img" style="width: 20px; height: 20px;" src="./images/opened.svg" alt="Toggle">
+                </button>
+                <div class="Answer" style="display:none;">
+                    ${item.content} <br> <strong>Author:</strong> ${item.author}
+                    <button class="edit-btn" style="margin-left:10px;">Edit</button>
+                    <button class="delete-btn" style="margin-left:5px;">Delete</button>
+                </div>
+            `;
+            container.appendChild(accord);
+
+            // === Accordion ochish-yopish ===
+            const questionBtn = accord.querySelector('.Question');
+            const answerDiv = accord.querySelector('.Answer');
+            const img = accord.querySelector('.up-img');
+
+            questionBtn.addEventListener('click', () => {
+                const opened = accord.classList.contains('opened');
+                document.querySelectorAll('.accord').forEach(acc => {
+                    acc.classList.remove('opened');
+                    acc.querySelector('.Answer').style.display = 'none';
+                    acc.querySelector('.up-img').src = './images/opened.svg';
+                });
+                if (!opened) {
+                    accord.classList.add('opened');
+                    answerDiv.style.display = 'block';
+                    img.src = './images/closed.svg';
+                }
+            });
+
+            // === Tugmalar ===
+            accord.querySelector('.delete-btn').addEventListener('click', () => deleteAccord(item.id));
+            accord.querySelector('.edit-btn').addEventListener('click', () => editPost(item.id));
+        });
+
+        setupEvents();
+    }
+
+    // ======== EVENTLAR ========
+    function setupEvents() {
+        const addForm = document.getElementById('add-form');
+        const addBtn = document.getElementById('sub-btn');
+        const formBtn = document.getElementById('form-btn');
+
+        addBtn.addEventListener('click', () => {
+            editingId = null; // yangi yozuv uchun
+            formBtn.textContent = 'Create Accord';
+            addForm.reset();
+            addForm.style.display = addForm.style.display === 'none' ? 'block' : 'none';
+        });
+
+        addForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const q = document.getElementById('Question-input').value.trim();
+            const a = document.getElementById('Ansver-input').value.trim();
+            if (!q || !a) return;
+
+            if (editingId) {
+                await updateAccord(editingId, q, a);
+            } else {
+                await createAccord(q, a);
+            }
+
+            addForm.reset();
+            addForm.style.display = 'none';
+            editingId = null;
+            fetchAccords();
+        });
+    }
+
+    // ======== CREATE ========
+    async function createAccord(q, a) {
+        try {
+            const response = await fetch(API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: q, content: a, author: q })
+            });
+            if (!response.ok) console.error('Yaratish xatosi');
+        } catch (err) {
+            console.error('Yaratish xatosi:', err);
+        }
+    }
+
+    // ======== UPDATE ========
+    async function updateAccord(id, q, a) {
+        try {
+            const response = await fetch(`${API_BASE}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: q, content: a, author: q })
+            });
+            if (!response.ok) console.error('Yangilash xatosi');
+        } catch (err) {
+            console.error('Yangilash xatosi:', err);
+        }
+    }
+
+    // ======== DELETE ========
+    async function deleteAccord(id) {
+        try {
+            const response = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+            if (response.ok) fetchAccords();
+        } catch (err) {
+            console.error('O‘chirish xatosi:', err);
+        }
+    }
+
+    // ======== EDIT ========
+    async function editPost(id) {
+        const post = allAccords.find(p => p.id === id);
+        if (!post) return;
+
+        const form = document.getElementById('add-form');
+        const qInput = document.getElementById('Question-input');
+        const aInput = document.getElementById('Ansver-input');
+        const formBtn = document.getElementById('form-btn');
+
+        form.style.display = 'block';
+        qInput.value = post.title;
+        aInput.value = post.content;
+        formBtn.textContent = 'Save Changes';
+        editingId = id;
+    }
+
+    // ======== START ========
+    fetchAccords();
+});

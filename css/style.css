@@ -1,114 +1,189 @@
-*{
-    padding: 0;
-    margin: 0;
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
 }
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9fafb;
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
+  background-image: url(../images/bg-rasm.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  min-height: 100vh;
+  backdrop-filter: blur(5px);
 }
 
 .Container {
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .accord {
-    border-bottom: 1px solid #e5e7eb;
-    margin-top: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-top: 20px;
 }
 
 .accord:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .Question {
-    width: 100%;
-    padding: 15px;
-    background-color: #f3f4f6;
-    border: none;
-    text-align: left;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #5de9f0 0%, #f696eb 100%);
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
 }
-.Title{
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    margin: 10px 0px 10px 0px;
-    margin-right: 10px;
+
+.Title {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0px 10px 0px;
+  margin-right: 10px;
 }
+
+.Title img {
+  width: 180px;
+  height: 150px;
+}
+
+.Title button {
+  height: 40px;
+}
+
 .Question:hover {
-    background-color: #e5e7eb;
+  background-color: #e5e7eb;
 }
 
 .Answer {
-    display: none;
-    padding: 15px;
-    color: #4b5563;
-    background-color: #fff;
+  display: none;
+  padding: 15px;
+  color: #4b5563;
+  background-color: #fff;
+  position: relative;
 }
 
 .accord.opened .Answer {
-    display: block;
+  display: block;
 }
 
+/* Fon rangini o'chirish */
 .accord.opened .Question {
-    background-color: #e0f2fe;
+  background: linear-gradient(135deg, #5de9f0 0%, #f696eb 100%);
 }
-.input-a{
-    width: 100%;
-    max-width: 500px;
-    height: 56px;
-    border-radius: 8px;
-    display: block;
-    border: 1px solid gray;
-    margin: auto;
-    margin-bottom: 10px;
-}
-.input-q{
-    width: 100%;    
-    max-width: 500px;
-    height: 25px;
-    border-radius: 8px;
-    display: block;
-    border: 1px solid gray;
-    margin: auto;
-}
-.label{
-    margin-left: 50px;
 
-    
+.input-a {
+  width: 100%;
+  max-width: 500px;
+  height: 56px;
+  border-radius: 8px;
+  display: block;
+  border: 2px solid rgb(55, 231, 213);
+  margin: auto;
+  margin-bottom: 10px;
 }
+
+.input-q {
+  width: 100%;
+  max-width: 500px;
+  height: 25px;
+  border-radius: 8px;
+  display: block;
+  border: 2px solid rgb(35, 171, 216);
+  margin: auto;
+}
+
+.label {
+  margin-left: 50px;
+  font-size: 20px;
+  color: rgb(36, 35, 35);
+}
+
 .btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-create {
-    background: linear-gradient(135deg, #26d7e1 0%, #764ba2 100%);
-    color: white;
+  background: linear-gradient(135deg, #26e17d 0%, #52a2c8 100%);
+  color: white;
 }
 
-.btn-cancel {
-    background: #e2e8f0;
-    color: #4a5568;
+.form {
+  display: none;
+}
+
+.form.active {
+  display: block;
+}
+
+.form-btns {
+  display: flex;
+  gap: 15px;
+  justify-content: end;
+  margin-right: 46px;
+}
+
+.sub-btn {
+  margin-right: 20px;
+  background: linear-gradient(135deg, #e061cf 0%, #52a2c8 100%);
+  color: white;
+}
+
+.h1 {
+  margin-left: 20px;
+}
+
+.del-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  background-color: #f44336;
+  color: white;
+}
+
+.edit-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  background-color: #5ac95c;
+  color: white;
+
+}
+
+.delete-btn:hover {
+  opacity: 0.8;
+}
+
+.edit-btn:hover {
+  opacity: 0.8;
 }
